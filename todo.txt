@@ -1,0 +1,7 @@
+Calendar TODO:
+	-consider allowing no year zero, giving it either a name, two names, or just going straight from +1 to -1 in the calendar year. Something like that.
+	-Wet and dry seasons are hard.
+	-Custom month names.
+	-Consider adding the DF month names here too.
+	-Seasons with realistic calendar dates would likely be hard as well.
+	-Notes on wet/dry seasons from wikipedia: southern hemisphere rainy season roughly from October to March, dry rest, north is the opposite, if we're in the tropical rain belt.  At the equator there are two wet and two dry seasons, as the rain belt passes over twice a year, once moving north and once moving south. The rain belt reaches roughly as far north as the Tropic of Cancer and as far south as the Tropic of Capricorn. Near these latitudes, there is one wet season and one dry season annually. At the equator there are two wet and two dry seasons, as the rain belt passes over twice a year, once moving north and once moving south. Between the tropics and the equator, locations may experience a short wet and a long wet season; and a short dry and a long dry season. Local geography may substantially modify these climate patterns, however. 
