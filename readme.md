@@ -7,7 +7,8 @@ There are 7*4*3*4 = 336 days per year in this Calendar, ~92% of a year.
 
 Seasons line up with the numbers of the months and as such it's more
 readable. The calendar starts on year zero, which may not be preferred 
-by some.
+by some. That said, I am tracking double lunar phases here (1/4 of a 
+cycle, rather than 1/8).
 
 The lunar phases are by default weekly, though for my own game I created the
 option of having a lunar phase that operated yearly instead.
