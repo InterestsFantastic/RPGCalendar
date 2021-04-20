@@ -1,14 +1,20 @@
-'''Simple RPG calendar, with 7 day week, 4 weeks per month,
-3 months per season, 4 seasons per year.
+'''Simple RPG calendar, with 7 day week, 4 weeks per month, 3 months per season, 4 seasons per year.
 
-The calendar starts at year zero by default. The lunar phase calculation
-reflects that. Year 0, 4, 8, ... are waxing moons.
-There are 7*4*3*4 = 336 days per year in this Calendar, ~92% of a year.
+The calendar starts at year zero by default. The lunar phase calculation reflects that. Year 0, 4, 8, ... are waxing moons. There are 743*4 = 336 days per year in this Calendar, ~92% of a year.
 
-Seasons line up with the numbers of the months and as such it's more readable.
+Seasons line up with the numbers of the months and as such it's more readable. The calendar starts on year zero, which may not be preferred by some. That said, I am tracking double lunar phases here (1/4 of a cycle, rather than 1/8).
 
-The lunar phases are by default weekly, though for my own game I created the
-option of having a lunar phase that operated yearly instead.
+The lunar phases are by default weekly, though for my own game I created the option of having a lunar phase that operated yearly instead.
+
+There are a bunch of reporting options, including those easily machine- readable and reports that are more immersive. Some are below.
+
+Day 2, Week 4, Month 1, Year 1. Lunar Phase: Full.
+
+It is the 23rd of Springswax, of the year 1. It is Spring and the moon is full.
+
+It is the 2nd day of the 4th week of the 1st month of Spring. The moon is full.
+
+2,4,1,1,1,2
 
 The choice of "back" for "backwards" is for brevity.'''
 
@@ -238,15 +244,42 @@ rather than moving forward three months.'''
                f'{self.season},{self.lunar_phase}'
 
     def report_machine_DOM(self):
-        '''Hopefully this is also convenient for use with other programs.
-It uses day of month.'''
+        '''This uses day of month.'''
         return f'{self.day_of_month()},{self.week},{self.month},{self.year},' + \
+               f'{self.season},{self.lunar_phase}'
+
+    def report_machine_high_first(self):
+        '''Hopefully this will result in easier sorting when used with a
+database. It is high to low, though I'm putting the season before the lunar
+phase, and both of those are at the end.'''
+        return f'{self.year},{self.month},{self.week},{self.day},' + \
+               f'{self.season},{self.lunar_phase}'
+
+    def report_machine_DOM_high_first(self):
+        '''This uses day of month.'''
+        return f'{self.year},{self.month},{self.day_of_month()},{self.week},' + \
                f'{self.season},{self.lunar_phase}'
 
     def generation_args(self):
         '''Use the returned list to generate another calendar, if you want.'''
         return [self.day, self.week, self.month, self.year]
 
+    def convert_to_gen_with_DOM_high(dom_high):
+        '''I assume this will be the preferred interaction with DB,
+so I'm providing something that will return the args list required to generate
+the calendar from this output.'''
+        # split on commas, take first three entries, convert them to ints.
+        year, month, day = map(int, dom_high.split(',')[0:3])
+        # The 7th day is still week 1.
+        if day % 7 == 0:
+            week = day // 7
+            day = 7
+        else:
+            week = day // 7 + 1
+            day %= 7
+        return [day, week, month, year]
+        
+        
 class YearlyLunarPhase(Calendar):
     '''In this calendar, a lunar phase lasts an entire year, so there's a
 year of waxing moon, a year of full moon, a year of waning moon, then
@@ -300,6 +333,13 @@ def test_normal_calendar():
     print(c.report_immersive())
     c.back_weeks(2)
     print(c.report_immersive())
+    print(c.report_machine())
+    print(c.report_machine_DOM())
+    print(c.report_machine_high_first())
+    print(c.report_machine_DOM_high_first())
+    t = c.report_machine_DOM_high_first()
+    t = Calendar.convert_to_gen_with_DOM_high(t)
+    print(t)
 
 def test_odd_calendar():
     c = YearlyLunarPhase()
@@ -326,3 +366,4 @@ def test_odd_calendar():
 if __name__ == '__main__':
 ##    test_odd_calendar()
     test_normal_calendar()
+
