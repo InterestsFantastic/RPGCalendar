@@ -255,6 +255,9 @@ phase, and both of those are at the end.'''
         return f'{self.year},{self.month},{self.week},{self.day},' + \
                f'{self.season},{self.lunar_phase}'
 
+    def report(self):
+        return self.report_machine_DOM_high_first()
+    
     def report_machine_DOM_high_first(self):
         '''This uses day of month.'''
         return f'{self.year},{self.month},{self.day_of_month()},{self.week},' + \
@@ -278,7 +281,10 @@ the calendar from this output.'''
             week = day // 7 + 1
             day %= 7
         return [day, week, month, year]
-        
+
+    def convert(dom_high):
+        '''Let's call this the default conversion method.'''
+        return Calendar.convert_to_gen_with_DOM_high(dom_high)
         
 class YearlyLunarPhase(Calendar):
     '''In this calendar, a lunar phase lasts an entire year, so there's a
@@ -340,6 +346,8 @@ def test_normal_calendar():
     t = c.report_machine_DOM_high_first()
     t = Calendar.convert_to_gen_with_DOM_high(t)
     print(t)
+    t2 = Calendar(*Calendar.convert(c.report()))
+    print(t2.report())
 
 def test_odd_calendar():
     c = YearlyLunarPhase()
@@ -362,8 +370,8 @@ def test_odd_calendar():
     c.forward_years(2)
     print(c.generation_args())
     print(c.report_farmers())
+
     
 if __name__ == '__main__':
 ##    test_odd_calendar()
     test_normal_calendar()
-
